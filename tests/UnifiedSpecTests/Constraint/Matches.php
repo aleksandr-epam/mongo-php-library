@@ -7,6 +7,8 @@ use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Type;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
+use MongoDB\Model\CollectionInfo;
+use MongoDB\Model\IndexInfo;
 use MongoDB\Tests\UnifiedSpecTests\EntityMap;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -445,6 +447,10 @@ class Matches extends Constraint
 
         if (is_array($bson) && self::isArrayEmptyOrIndexed($bson)) {
             $bson = new BSONArray($bson);
+        }
+
+        if ($bson instanceof CollectionInfo || $bson instanceof IndexInfo) {
+            $bson = new BSONDocument($bson->__debugInfo());
         }
 
         if (! $bson instanceof BSONArray && ! $bson instanceof BSONDocument) {
