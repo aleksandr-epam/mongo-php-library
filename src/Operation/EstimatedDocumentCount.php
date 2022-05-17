@@ -29,7 +29,6 @@ use MongoDB\Exception\UnsupportedException;
 
 use function array_intersect_key;
 use function is_integer;
-use function MongoDB\server_supports_feature;
 
 /**
  * Operation for obtaining an estimated count of documents in a collection
@@ -111,7 +110,7 @@ class EstimatedDocumentCount implements Executable, Explainable
      */
     public function execute(Server $server)
     {
-        $command = $this->createCommand($server);
+        $command = $this->createCount();
 
         if ($command instanceof Aggregate) {
             try {
@@ -141,28 +140,7 @@ class EstimatedDocumentCount implements Executable, Explainable
      */
     public function getCommandDocument(Server $server)
     {
-        return $this->createCommand($server)->getCommandDocument($server);
-    }
-
-    private function createAggregate(): Aggregate
-    {
-        return new Aggregate(
-            $this->databaseName,
-            $this->collectionName,
-            [
-                ['$collStats' => ['count' => (object) []]],
-                ['$group' => ['_id' => 1, 'n' => ['$sum' => '$count']]],
-            ],
-            $this->options
-        );
-    }
-
-    /** @return Aggregate|Count */
-    private function createCommand(Server $server)
-    {
-        return server_supports_feature($server, self::$wireVersionForCollStats)
-            ? $this->createAggregate()
-            : $this->createCount();
+        return $this->$this->createCount()->getCommandDocument($server);
     }
 
     private function createCount(): Count
