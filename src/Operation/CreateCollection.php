@@ -100,6 +100,8 @@ class CreateCollection implements Executable
      *  * maxTimeMS (integer): The maximum amount of time to allow the query to
      *    run.
      *
+     *  * pipeline (pipeline): List of pipeline operations
+     *
      *  * session (MongoDB\Driver\Session): Client session.
      *
      *  * size (integer): The maximum number of bytes for a capped collection.
@@ -118,6 +120,12 @@ class CreateCollection implements Executable
      *  * validationLevel (string): Validation level.
      *
      *  * validator (document): Validation rules or expressions.
+     *
+     *  * viewOn (string): The name of the source collection or view from which
+     *    to create the view. The name is not the full namespace of the collection
+     *    or view; i.e. does not include the database name and implies the same
+     *    database as the view to create. You must create views in the same database
+     *    as the source collection.
      *
      *  * writeConcern (MongoDB\Driver\WriteConcern): Write concern.
      *
@@ -247,7 +255,7 @@ class CreateCollection implements Executable
     {
         $cmd = ['create' => $this->collectionName];
 
-        foreach (['autoIndexId', 'capped', 'expireAfterSeconds', 'flags', 'max', 'maxTimeMS', 'size', 'validationAction', 'validationLevel'] as $option) {
+        foreach (['autoIndexId', 'capped', 'expireAfterSeconds', 'flags', 'max', 'maxTimeMS', 'pipeline', 'size', 'validationAction', 'validationLevel', 'viewOn'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
