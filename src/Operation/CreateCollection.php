@@ -100,7 +100,8 @@ class CreateCollection implements Executable
      *  * maxTimeMS (integer): The maximum amount of time to allow the query to
      *    run.
      *
-     *  * pipeline (pipeline): List of pipeline operations
+     *  * pipeline (array): An array that consists of the aggregation pipeline
+     *    stage(s).
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
