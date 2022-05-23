@@ -30,6 +30,7 @@ use function is_bool;
 use function is_integer;
 use function is_object;
 use function is_string;
+use function sprintf;
 use function trigger_error;
 
 use const E_USER_DEPRECATED;
@@ -179,6 +180,10 @@ class CreateCollection implements Executable
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
         }
 
+        if (isset($options['pipeline']) && ! is_array($options['pipeline'])) {
+            throw InvalidArgumentException::invalidType('"pipeline" option', $options['pipeline'], 'array');
+        }
+
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
             throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
         }
@@ -211,6 +216,10 @@ class CreateCollection implements Executable
             throw InvalidArgumentException::invalidType('"validator" option', $options['validator'], 'array or object');
         }
 
+        if (isset($options['viewOn']) && ! is_string($options['viewOn'])) {
+            throw InvalidArgumentException::invalidType('"viewOn" option', $options['viewOn'], 'string');
+        }
+
         if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
@@ -221,6 +230,22 @@ class CreateCollection implements Executable
 
         if (isset($options['autoIndexId'])) {
             trigger_error('The "autoIndexId" option is deprecated and will be removed in a future release', E_USER_DEPRECATED);
+        }
+
+        if (isset($options['pipeline'])) {
+            $expectedIndex = 0;
+
+            foreach ($options['pipeline'] as $i => $operation) {
+                if ($i !== $expectedIndex) {
+                    throw new InvalidArgumentException(sprintf('$pipeline is not a list (unexpected index: "%s")', $i));
+                }
+
+                if (! is_array($operation) && ! is_object($operation)) {
+                    throw InvalidArgumentException::invalidType(sprintf('$pipeline[%d]', $i), $operation, 'array or object');
+                }
+
+                $expectedIndex += 1;
+            }
         }
 
         $this->databaseName = (string) $databaseName;
