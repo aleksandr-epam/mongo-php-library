@@ -227,10 +227,6 @@ class Aggregate implements Executable, Explainable
             unset($options['readConcern']);
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         $this->isExplain = ! empty($options['explain']);
         $this->isWrite = is_last_pipeline_operator_write($pipeline) && ! $this->isExplain;
 

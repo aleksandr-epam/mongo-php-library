@@ -87,10 +87,6 @@ class RenameCollection implements Executable
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         if (isset($options['dropTarget']) && ! is_bool($options['dropTarget'])) {
             throw InvalidArgumentException::invalidType('"dropTarget" option', $options['dropTarget'], 'boolean');
         }

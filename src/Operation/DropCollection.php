@@ -85,10 +85,6 @@ class DropCollection implements Executable
             throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         $this->databaseName = (string) $databaseName;
         $this->collectionName = (string) $collectionName;
         $this->options = $options;

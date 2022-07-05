@@ -121,10 +121,6 @@ class InsertMany implements Executable
             unset($options['bypassDocumentValidation']);
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         $this->databaseName = (string) $databaseName;
         $this->collectionName = (string) $collectionName;
         $this->documents = $documents;

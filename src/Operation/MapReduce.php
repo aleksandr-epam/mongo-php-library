@@ -232,10 +232,6 @@ class MapReduce implements Executable
             unset($options['readConcern']);
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         // Handle deprecation of CodeWScope
         if ($map->getScope() !== null) {
             @trigger_error('Use of Javascript with scope in "$map" argument for MapReduce is deprecated. Put all scope variables in the "scope" option of the MapReduce operation.', E_USER_DEPRECATED);

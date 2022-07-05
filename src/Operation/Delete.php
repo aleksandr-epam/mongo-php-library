@@ -127,10 +127,6 @@ class Delete implements Executable, Explainable
             throw InvalidArgumentException::invalidType('"let" option', $options['let'], 'array or object');
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         $this->databaseName = (string) $databaseName;
         $this->collectionName = (string) $collectionName;
         $this->filter = $filter;

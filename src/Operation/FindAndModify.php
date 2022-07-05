@@ -205,10 +205,6 @@ class FindAndModify implements Executable, Explainable
             throw new InvalidArgumentException('The "remove" option must be true or an "update" document must be specified, but not both');
         }
 
-        if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
-            unset($options['writeConcern']);
-        }
-
         $this->databaseName = (string) $databaseName;
         $this->collectionName = (string) $collectionName;
         $this->options = $options;
